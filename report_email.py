@@ -19,7 +19,7 @@ def get_fruit_from_dir(in_dir):
     full_name = os.path.join(in_dir, fname)
     with open(full_name) as desc_file:
       name = desc_file.readline().rstrip()
-      weight = int(desc_file.readline().rstrip().split(' ')[0])
+      weight = desc_file.readline().rstrip()
       out_list.append((name, weight))
   return out_list
 
@@ -29,7 +29,7 @@ def main():
   fruits = get_fruit_from_dir(in_dir)
   paragraph = ''
   for fruit in fruits:
-      block = "name: {}<br/>wieght: {} lbs<br/><br/>".format(
+      block = "name: {}<br/>wieght: {}<br/><br/>".format(
               fruit[0],fruit[1])
       paragraph = paragraph + block
   reports.generate_report(pdf_name, title, paragraph)
