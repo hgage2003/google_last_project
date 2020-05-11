@@ -12,6 +12,9 @@ def generate_email(sender, recipient, subject, body, attachment_path):
   message["subject"] = subject
   message.set_content(body)
 
+  if attachment_path == None:
+      return message
+
   #Process the attachment and add it to the email
   attachment_filename = os.path.basename(attachment_path)
   mime_type, _ = mimetypes.guess_type(attachment_path)
