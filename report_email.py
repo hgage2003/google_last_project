@@ -8,7 +8,7 @@ import emails
 pdf_name = '/tmp/processed.pdf'
 in_dir = os.path.expanduser('~/supplier-data/descriptions')
 
-# returns list of tuples (name, weight) from txt files
+#returns formatted string for pdf
 def get_fruit_from_dir(in_dir):
   out_list = []
   filenames = os.listdir(in_dir)
@@ -20,19 +20,15 @@ def get_fruit_from_dir(in_dir):
     with open(full_name) as desc_file:
       name = desc_file.readline().rstrip()
       weight = desc_file.readline().rstrip()
-      out_list.append((name, weight))
-  return out_list
+      out_list.append("name: {}<br/>weight: {}".format(
+          name, weight))
+  return "<br/><br/>".join(out_list)
 
 def main():
   title = "Processed Update on {}".format(
           datetime.date.today().strftime("%B %d, %Y"))
   fruits = get_fruit_from_dir(in_dir)
-  paragraph = ''
-  for fruit in fruits:
-      block = "name: {}<br/>wieght: {}<br/><br/>".format(
-              fruit[0],fruit[1])
-      paragraph = paragraph + block
-  reports.generate_report(pdf_name, title, paragraph)
+  reports.generate_report(pdf_name, title, fruits)
 
   sender = 'automation@example.com'
   receiver = '{}@example.com'.format(os.environ['USER'])
