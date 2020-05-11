@@ -5,8 +5,8 @@ import os
 import datetime
 import emails
 
-pdf_name = os.path.expanduser('processed.pdf')
-in_dir = os.path.expanduser('supplier-data/descriptions')
+pdf_name = os.path.expanduser('/tmp/processed.pdf')
+in_dir = os.path.expanduser('~/supplier-data/descriptions')
 
 # returns list of tuples (name, weight) from txt files
 def get_fruit_from_dir(in_dir):
