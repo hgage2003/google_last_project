@@ -27,12 +27,17 @@ def main():
   title = "Processed Update on {}".format(
           datetime.date.today().strftime("%B %d, %Y"))
   fruits = get_fruit_from_dir(in_dir)
-  reports.generate_report(pdf_name, title, fruits)
+  paragraph = ''
+  for fruit in fruits:
+      block = "name: {}<br/>wieght: {} lbs<br/><br/>".format(
+              fruit[0],fruit[1])
+      paragraph = paragraph + block
+  reports.generate_report(pdf_name, title, paragraph)
 
   sender = 'automation@example.com'
   receiver = '{}@example.com'.format(os.environ['USER'])
   subject = 'Upload Completed - Online Fruit Store'
-  body = 'All fruits are uploaded to our website successfully. A detailed list is attached to this email'
+  body = 'All fruits are uploaded to our website successfully. A detailed list is attached to this email.'
 
   message = emails.generate_email(sender, receiver, subject, body, pdf_name)
   emails.send_email(message)
