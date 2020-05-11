@@ -3,8 +3,9 @@
 import reports
 import os
 import datetime
+import emails
 
-pdf_name = 'processed.pdf'
+pdf_name = os.path.expanduser('processed.pdf')
 in_dir = os.path.expanduser('supplier-data/descriptions')
 
 # returns list of tuples (name, weight) from txt files
@@ -27,7 +28,14 @@ def main():
           datetime.date.today().strftime("%B %d, %Y"))
   fruits = get_fruit_from_dir(in_dir)
   reports.generate_report(pdf_name, title, fruits)
-  
+
+  sender = 'automation@example.com'
+  receiver = '{}@example.com'.format(os.environ['USER'])
+  subject = 'Upload Completed - Online Fruit Store'
+  body = 'All fruits are uploaded to our website successfully. A detailed list is attached to this email'
+
+  message = emails.generate_email(sender, receiver, subject, body, pdf_name)
+  emails.send_email(message)
 
 if __name__ == "__main__":
   main()
