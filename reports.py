@@ -4,6 +4,7 @@ from reportlab.platypus import SimpleDocTemplate
 from reportlab.platypus import Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 
+# create pdf at filename with title, empty line and additional_info
 def generate_report(filename, title, additional_info):
   styles = getSampleStyleSheet()
   report = SimpleDocTemplate(filename)
