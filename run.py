@@ -5,34 +5,44 @@ import requests
 import json
 
 url = 'http://34.71.9.157/fruits/'
-in_dir = os.path.expanduser('~/supplier-data/descriptions')
+txt_dir = os.path.expanduser('~/supplier-data/descriptions')
+img_dir = os.path.expanduser('~/supplier-data/images')
 
-def read_files_to_list(path):
-  out_list = []
-  for f_name in os.listdir(in_dir):
-    #only iterate through .txt files
-    name, ext = os.path.splitext(f_name)
+# iterate through .txt files in dir and
+# return a list of dictionaries
+def make_requests(txt_path, img_path):
+  result = []
 
-    print(name + ext)
-
-    if not ext == '.txt':
-      continue
+  #only iterate through .txt files
+  txt_files = [f for f in os.listdir(txt_path) if f.endswith('.txt')]
+  #need this to check if corresponding image presents
+  img_files = [f for f in os.listdir(img_path) if f.endswith('.jpeg')]
   
-    file_path = os.path.join(in_dir, f_name)
-    fruit_dict = {}
-    with open(file_path) as f:
-      fruit_dict['name'] = f.readline().rstrip()
-      fruit_dict['weight'] = int(f.readline().rstrip().split(' ')[0])
-      fruit_dict['description'] = f.readline().rstrip()
-      fruit_dict['image_name'] = name + '.jpeg'
+  for filename in txt_files:
+    full_path = os.path.join(txt_path, filename)
 
-    out_list.append(fruit_dict)
-  return out_list
+    fruit = {}
+    with open(full_path) as f:
+      fruit['name'] = f.readline().rstrip()
+      # convert from string '100 lbs' to int 100
+      fruit['weight'] = int(f.readline().rstrip().split(' ')[0])
+      fruit['description'] = f.readline().rstrip()
+      f.close()
 
-fruits_list = read_files_to_list(in_dir)
-for fruit in fruits_list:
-    #fruit_json = json.dumps(fruit)
-    #print(fruit_json)
-    response = requests.post(url, data=fruit)
+      image_name, _ = os.path.splitext(filename)
+      image_name += '.jpeg'
+      if image_name in img_files:
+        fruit['image_name'] = image_name
+
+    result.append(fruit)
+  return result
+
+def main():
+  fruits_list = make_requests(txt_dir, img_dir)
+ 
+  for fruit in fruits_list:
+    response = requests.post(url, json=fruit)
     response.raise_for_status()
 
+if __name__ == '__main__':
+  main()
