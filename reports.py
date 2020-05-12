@@ -10,5 +10,5 @@ def generate_report(filename, title, additional_info):
   report = SimpleDocTemplate(filename)
   report_title = Paragraph(title, styles["h1"])
   empty_line = Spacer(1,20)
-  body = Paragraph(additional_info, styles["BodyText"])
+  body = Paragraph(additional_info, styles["Normal"])
   report.build([report_title, empty_line, body])
